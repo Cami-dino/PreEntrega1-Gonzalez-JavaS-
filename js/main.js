@@ -1,15 +1,15 @@
-// Función para verificar si el usuario tiene derecho a un descuento basado en la edad
+const peliculas = [
+    { nombre: "Inception", horario: ["14:00", "17:00", "20:00"], costo: 1000 },
+    { nombre: "Titanic", horario: ["13:00", "16:00", "19:00"], costo: 1200 },
+    { nombre: "Avatar", horario: ["15:00", "18:00", "21:00"], costo: 1500 }
+];
+
 function verificarDescuento(edad) {
-    if (edad < 12 || edad >= 65) {
-        return true;
-    } else {
-        return false;
-    }
+    return edad < 12 || edad >= 65;
 }
 
 // Función para calcular el costo total de las entradas
-function calcularCostoTotal(cantidadEntradas, tieneDescuento) {
-    const costoEntrada = 1000;
+function calcularCostoTotal(cantidadEntradas, tieneDescuento, costoEntrada) {
     let costoTotal = cantidadEntradas * costoEntrada;
 
     if (tieneDescuento) {
@@ -19,8 +19,35 @@ function calcularCostoTotal(cantidadEntradas, tieneDescuento) {
     return costoTotal;
 }
 
-// Función principal que controla el proceso de compra de entradas
+function buscarPelicula(nombrePelicula) {
+    return peliculas.find(pelicula => pelicula.nombre.toLowerCase() === nombrePelicula.toLowerCase());
+}
+
+function filtrarHorarios(pelicula) {
+    return pelicula.horario;
+}
+
 function comprarEntradas() {
+    // Selección de película
+    const nombrePelicula = prompt("¿Qué película desea ver? (Inception, Titanic, Avatar)");
+    const peliculaSeleccionada = buscarPelicula(nombrePelicula);
+
+    // Validación de película
+    if (!peliculaSeleccionada) {
+        console.log("Película no encontrada. Inténtelo nuevamente.");
+        return;
+    }
+
+    // Selección de horario
+    const horariosDisponibles = filtrarHorarios(peliculaSeleccionada);
+    const horarioSeleccionado = prompt(`Horarios disponibles para ${peliculaSeleccionada.nombre}: ${horariosDisponibles.join(", ")}. ¿Qué horario desea?`);
+
+    if (!horariosDisponibles.includes(horarioSeleccionado)) {
+        console.log("Horario no disponible. Inténtelo nuevamente.");
+        return;
+    }
+
+    // Cantidad de entradas
     let cantidadEntradas = parseInt(prompt("¿Cuántas entradas desea comprar?"), 10);
 
     // Validación de la cantidad de entradas
@@ -28,6 +55,7 @@ function comprarEntradas() {
         cantidadEntradas = parseInt(prompt("Por favor, ingrese un número válido de entradas:"), 10);
     }
 
+    // Edad del usuario
     let edad = parseInt(prompt("Ingrese su edad:"), 10);
 
     // Validación de la edad
@@ -36,14 +64,12 @@ function comprarEntradas() {
     }
 
     const tieneDescuento = verificarDescuento(edad);
-    const costoTotal = calcularCostoTotal(cantidadEntradas, tieneDescuento);
+    const costoTotal = calcularCostoTotal(cantidadEntradas, tieneDescuento, peliculaSeleccionada.costo);
 
-    // Mostrar el costo total de las entradas
-    console.log(`El costo total de sus entradas es: $${costoTotal}`);
+    console.log(`El costo total de sus entradas para ${peliculaSeleccionada.nombre} a las ${horarioSeleccionado} es: $${costoTotal}`);
     if (tieneDescuento) {
         console.log("Se aplicó un descuento por edad.");
     }
 }
 
-// Llamada a la función principal
 comprarEntradas();
