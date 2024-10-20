@@ -5,26 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
         { nombre: "Avatar", horario: ["15:00", "18:00", "21:00"], costo: 1500 }
     ];
 
-    // Función para calcular el costo total de las entradas
-    function calcularCostoTotal(cantidadEntradas, tieneDescuento, costoEntrada) {
-        let costoTotal = cantidadEntradas * costoEntrada;
-        if (tieneDescuento) {
-            costoTotal *= 0.8; // Aplicar un 20% de descuento
-        }
-        return costoTotal;
-    }
-
-    // Función para verificar si aplica descuento por edad
-    function verificarDescuento(edad) {
-        return edad < 12 || edad >= 65;
-    }
-
-    // Función para buscar película por nombre
-    function buscarPelicula(nombrePelicula) {
-        return peliculas.find(pelicula => pelicula.nombre.toLowerCase() === nombrePelicula.toLowerCase());
-    }
-
-    // Cargar las películas en el select
     const selectPelicula = document.getElementById('pelicula');
     peliculas.forEach(pelicula => {
         const option = document.createElement('option');
@@ -33,11 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
         selectPelicula.appendChild(option);
     });
 
-    // Evento para mostrar horarios cuando se selecciona una película
     selectPelicula.addEventListener('change', () => {
-        const peliculaSeleccionada = buscarPelicula(selectPelicula.value);
+        const peliculaSeleccionada = peliculas.find(pelicula => pelicula.nombre === selectPelicula.value);
         const selectHorario = document.getElementById('horario');
-        selectHorario.innerHTML = ''; // Limpiar los horarios previos
+        selectHorario.innerHTML = '';
 
         if (peliculaSeleccionada) {
             document.getElementById('horariosDiv').style.display = 'block';
@@ -52,56 +31,33 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Lógica para procesar la compra en el formulario
     document.getElementById('comprarBtn').addEventListener('click', () => {
-        // Limpiar mensajes de error previos
-        document.getElementById('resultado').textContent = '';
-
         let nombrePelicula = selectPelicula.value;
         let horarioSeleccionado = document.getElementById('horario').value;
         let cantidadEntradas = parseInt(document.getElementById('entradas').value, 10);
         let edad = parseInt(document.getElementById('edad').value, 10);
 
-        // Variable para almacenar los errores
         let errores = [];
+        if (!nombrePelicula) errores.push("Por favor, seleccione una película.");
+        if (!horarioSeleccionado) errores.push("Por favor, seleccione un horario.");
+        if (isNaN(cantidadEntradas) || cantidadEntradas <= 0) errores.push("Por favor, ingrese una cantidad válida de entradas.");
+        if (isNaN(edad) || edad <= 0) errores.push("Por favor, ingrese una edad válida.");
 
-        // Validar que se seleccionó una película
-        if (!nombrePelicula) {
-            errores.push("Por favor, seleccione una película.");
-        }
-
-        // Validar que se seleccionó un horario
-        if (!horarioSeleccionado) {
-            errores.push("Por favor, seleccione un horario.");
-        }
-
-        // Validar cantidad de entradas
-        if (isNaN(cantidadEntradas) || cantidadEntradas <= 0) {
-            errores.push("Por favor, ingrese una cantidad válida de entradas.");
-        }
-
-        // Validar edad
-        if (isNaN(edad) || edad <= 0) {
-            errores.push("Por favor, ingrese una edad válida.");
-        }
-
-        // Mostrar errores si los hay
         if (errores.length > 0) {
             document.getElementById('resultado').textContent = errores.join(" ");
-            return; // Detener la ejecución si hay errores
+            return;
         }
 
-        const peliculaSeleccionada = buscarPelicula(nombrePelicula);
-        const tieneDescuento = verificarDescuento(edad);
-        const costoTotal = calcularCostoTotal(cantidadEntradas, tieneDescuento, peliculaSeleccionada.costo);
+        const peliculaSeleccionada = peliculas.find(pelicula => pelicula.nombre === nombrePelicula);
+        const tieneDescuento = edad < 12 || edad >= 65;
+        const costoTotal = cantidadEntradas * peliculaSeleccionada.costo * (tieneDescuento ? 0.8 : 1);
 
         let resultado = `El costo total de sus entradas para ${peliculaSeleccionada.nombre} a las ${horarioSeleccionado} es: $${costoTotal}`;
-        if (tieneDescuento) {
-            resultado += ". Se aplicó un descuento por edad.";
-        }
+        if (tieneDescuento) resultado += ". Se aplicó un descuento por edad.";
 
         document.getElementById('resultado').textContent = resultado;
 
+        // Guardar los detalles de la compra en localStorage
         const compra = {
             pelicula: nombrePelicula,
             horario: horarioSeleccionado,
@@ -110,4 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         localStorage.setItem('ultimaCompra', JSON.stringify(compra));
     });
+
+    // Recuperar y mostrar la última compra guardada en localStorage
+    const ultimaCompra = JSON.parse(localStorage.getItem('ultimaCompra'));
+    if (ultimaCompra) {
+        const { pelicula, horario, cantidadEntradas, costoTotal } = ultimaCompra;
+        const mensajeUltimaCompra = `Última compra: ${cantidadEntradas} entradas para "${pelicula}" a las ${horario}, total: $${costoTotal}`;
+        document.getElementById('ultimaCompra').textContent = mensajeUltimaCompra;
+    }
 });
