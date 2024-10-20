@@ -7,12 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const horariosComunes = ["14:00", "17:00", "20:00"];
 
-    // Función para buscar película por nombre
+
     function buscarPelicula(nombrePelicula) {
         return peliculas.find(pelicula => pelicula.nombre === nombrePelicula);
     }
 
-    // Cargar las películas en el select
+
     const selectPelicula = document.getElementById('pelicula');
     peliculas.forEach(pelicula => {
         const option = document.createElement('option');
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectPelicula.appendChild(option);
     });
 
-    // Evento para mostrar horarios cuando se selecciona una película
+
     selectPelicula.addEventListener('change', () => {
         const peliculaSeleccionada = buscarPelicula(selectPelicula.value);
         const selectHorario = document.getElementById('horario');
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Lógica para procesar la compra en el formulario
+
     document.getElementById('comprarBtn').addEventListener('click', () => {
         // Limpiar mensajes previos
         document.getElementById('resultado').textContent = '';
@@ -54,27 +54,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let errores = [];
 
-        // Validar que se seleccionó una película
+
         if (!nombrePelicula) {
             errores.push("Por favor, seleccione una película.");
         }
 
-        // Validar que se seleccionó un horario
+
         if (!horarioSeleccionado) {
             errores.push("Por favor, seleccione un horario.");
         }
 
-        // Validar cantidad de entradas
+
         if (isNaN(cantidadEntradas) || cantidadEntradas <= 0) {
             errores.push("Por favor, ingrese una cantidad válida de entradas.");
         }
 
-        // Validar edad
+
         if (isNaN(edad) || edad <= 0) {
             errores.push("Por favor, ingrese una edad válida.");
         }
 
-        // Mostrar errores si los hay
+
         if (errores.length > 0) {
             document.getElementById('resultado').textContent = errores.join(" ");
             return; // Detener la ejecución si hay errores
@@ -84,14 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const tieneDescuento = (edad < 12 || edad >= 65);
         const costoTotal = calcularCostoTotal(cantidadEntradas, tieneDescuento, peliculaSeleccionada.costo);
 
-        // Mostrar el resultado en el área de mensajeCosto
+
         document.getElementById('mensajeCosto').textContent = `El costo total de sus entradas es: $${costoTotal}`;
 
         if (tieneDescuento) {
             document.getElementById('mensajeDescuento').textContent = "Se aplicó un descuento por edad.";
         }
 
-        // Guardar la compra en localStorage
+
         const compra = {
             pelicula: nombrePelicula,
             horario: horarioSeleccionado,
@@ -100,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         localStorage.setItem('ultimaCompra', JSON.stringify(compra));
 
-        // Mostrar la última compra en la consola (opcional)
         const ultimaCompra = JSON.parse(localStorage.getItem('ultimaCompra'));
         if (ultimaCompra) {
             console.log(`Última compra: ${ultimaCompra.cantidadEntradas} entradas para ${ultimaCompra.pelicula} a las ${ultimaCompra.horario}. Total: $${ultimaCompra.costoTotal}.`);
