@@ -1,0 +1,6 @@
+[
+    { "nombre": "Inception", "horario": ["14:00", "17:00", "20:00"], "costo": 1000 },
+    { "nombre": "Titanic", "horario": ["14:00", "17:00", "20:00"], "costo": 1200 },
+    { "nombre": "Avatar", "horario": ["14:00", "17:00", "20:00"], "costo": 1500 }
+]
+

@@ -1,46 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Compra de Entradas</title>
+    <script defer src="main.js"></script> <!-- Archivo JavaScript -->
 </head>
-
 <body>
     <h1>Compra de Entradas</h1>
-    
-    <!-- Contenedor para la última compra -->
-    <div id="ultimaCompra"></div>
 
-    <form id="formularioCompra">
-        <label for="pelicula">Película:</label>
-        <select id="pelicula">
-            <option value="">Seleccione una película</option>
+    <!-- Selección de película -->
+    <label for="pelicula">Seleccione la película:</label>
+    <select id="pelicula">
+        <option value="">Inception</option>
+        <option value="">Titanic</option>
+        <option value="">Avatar</option>
+    </select>
+
+    <!-- Selección de horario -->
+    <div id="horariosDiv">
+        <label for="horario">Seleccione el horario:</label>
+        <select id="horario">
+            <option value="">14:00</option>
+            <option value="">17:00</option>
+            <option value="">20:00</option>
         </select>
+    </div>
 
-        <div id="horariosDiv" style="display:none;">
-            <label for="horario">Horario:</label>
-            <select id="horario">
-                <option value="">Seleccione un horario</option>
-            </select>
-        </div>
-
+    <!-- Ingreso de cantidad de entradas -->
+    <div>
         <label for="entradas">Cantidad de entradas:</label>
-        <input type="number" id="entradas" min="1" required>
+        <input type="number" id="entradas" min="1">
+    </div>
 
-        <label for="edad">Edad:</label>
-        <input type="number" id="edad" min="1" required>
+    <!-- Ingreso de la edad del usuario -->
+    <div>
+        <label for="edad">Ingrese su edad:</label>
+        <input type="number" id="edad" min="1">
+    </div>
 
-        <button type="button" id="comprarBtn">Comprar</button>
-    </form>
+    <!-- Botón para comprar entradas -->
+    <button id="comprarBtn">Comprar Entradas</button>
 
-    <div id="resultado"></div>
+    <!-- Resultado del costo total -->
+    <p id="resultado"></p>
 
-    <script src="app.js"></script>
+    <!-- Información de la última compra almacenada en LocalStorage -->
+    <p id="ultimaCompra"></p>
+
 </body>
 </html>
 
-</html>
