@@ -5,9 +5,9 @@ const resultadoDiv = document.getElementById('resultado');
 const mensajeCosto = document.getElementById('mensajeCosto');
 const mensajeDescuento = document.getElementById('mensajeDescuento');
 
-let peliculas = []; // Array vacío que se llenará con fetch
+let peliculas = []; 
 
-// Función para cargar películas desde JSON
+
 async function cargarPeliculas() {
     try {
         const response = await fetch('peliculas.json');
@@ -18,7 +18,7 @@ async function cargarPeliculas() {
     }
 }
 
-// Llenar el select de películas
+
 function cargarOpcionesPeliculas() {
     selectPelicula.innerHTML = '<option value="" selected>-- Seleccione una película --</option>';
     peliculas.forEach(pelicula => {
@@ -29,12 +29,12 @@ function cargarOpcionesPeliculas() {
     });
 }
 
-// Función para buscar una película por nombre
+
 function buscarPelicula(nombrePelicula) {
     return peliculas.find(pelicula => pelicula.nombre === nombrePelicula);
 }
 
-// Evento para mostrar horarios cuando se selecciona una película
+
 selectPelicula.addEventListener('change', () => {
     const peliculaSeleccionada = buscarPelicula(selectPelicula.value);
     selectHorario.innerHTML = ''; // Limpiar horarios previos
@@ -52,18 +52,18 @@ selectPelicula.addEventListener('change', () => {
     }
 });
 
-// Función para calcular el costo total
+
 function calcularCostoTotal(cantidadEntradas, tieneDescuento, costoEntrada) {
     let costoTotal = cantidadEntradas * costoEntrada;
     return tieneDescuento ? costoTotal * 0.8 : costoTotal; // Aplicar 20% de descuento
 }
 
-// Función para verificar descuento por edad
+
 function verificarDescuento(edad) {
     return edad < 12 || edad >= 65;
 }
 
-// Evento para procesar la compra
+
 document.getElementById('comprarBtn').addEventListener('click', () => {
     resultadoDiv.textContent = '';
     mensajeCosto.textContent = '';
@@ -87,5 +87,5 @@ document.getElementById('comprarBtn').addEventListener('click', () => {
     mensajeDescuento.textContent = tieneDescuento ? "Se aplicó un descuento por edad." : "No se aplicó descuento.";
 });
 
-// Llamar a la función para cargar las películas al iniciar
+
 cargarPeliculas();
